@@ -30,19 +30,18 @@ class ProjectHelper:
 
     def open_project_page(self):
         wd = self.app.wd
-        wd.get("http://localhost/mantisbt-2.26.0/my_view_page.php")
-        wd.find_element("xpath", "//div[@id='sidebar']/ul/li[7]/a/i").click()
-        wd.find_element("xpath", "//a[contains(text(),'Проекты')]").click()
+        wd.find_element("link text", "Управление").click()
+        wd.find_element("link text", "Проекты").click()
 
     def get_project_list(self):
         wd = self.app.wd
         self.open_project_page()
         project = []
-        for element in wd.find_elements("tag name", "td"):
+        for element in wd.find_elements("css selector", "tr td a"):
             name = element.text
             href = element.get_attribute("href")
             href.startswith("http://localhost/mantisbt-2.26.0/manage_proj_edit_page.php?project_id=")
-            id = href[71:]
+            id = href[70:]
             project.append(Project(name=name, id=id))
         return project
 
@@ -58,15 +57,26 @@ class ProjectHelper:
         self.select_project_by_id(id)
         wd.find_element("xpath", "//form[@id='manage-proj-update-form']/div/div[3]/button[2]").click()
         a = wd.current_url
-        if wd.current_url == 'https://localhost/mantisbt-2.26.0/manage_proj_delete.php':
+        if wd.current_url == 'http://localhost/mantisbt-2.26.0/manage_proj_delete.php':
             wd.find_element("css selector","input[value='Удалить проект']").click()
 
     def select_project_by_id(self, id):
         wd = self.app.wd
         self.open_project_page()
-        wd.find_element("xpath", "a[href='mantisbt-2.26.0/manage_proj_edit_page.php?project_id=%s']" % id).click()
+        for element in wd.find_elements("css selector", "tr td a"):
+            name = element.text
+            href = element.get_attribute("href")
+            href.startswith("http://localhost/mantisbt-2.26.0/manage_proj_edit_page.php?project_id=")
+            ids = href[70:]
+            if id == ids:
+                wd.find_element("link text", "%s" % name).click()
+                break
+
 
     def count(self):
         wd = self.app.wd
         self.open_project_page()
-        return len(wd.find_elements("css selector", '.row-1 td a,.row-2 td a'))
+        return len(wd.find_elements("css selector", "tr td a"))
+
+    def project_name_is_already_exist(self, project, old_projects):
+        return any([old_project.name == project.name for old_project in old_projects])
