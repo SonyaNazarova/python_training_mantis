@@ -37,10 +37,14 @@ def stop(request):
     request.addfinalizer(fin)
     return fixture
 
+@pytest.fixture(scope="session")
+def config(request):
+    return load_config(request.config.getoption("--target"))
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="firefox")
     parser.addoption("--target", action="store", default="target.json")
+
 
 
 def pytest_generate_tests(metafunc):

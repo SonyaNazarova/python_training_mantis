@@ -55,7 +55,7 @@ class ProjectHelper:
     def del_project_by_id(self, id):
         wd = self.app.wd
         self.select_project_by_id(id)
-        wd.find_element("xpath", "//form[@id='manage-proj-update-form']/div/div[3]/button[2]").click()
+        wd.find_element("xpath", "//button[2]").click()
         a = wd.current_url
         if wd.current_url == 'http://localhost/mantisbt-2.26.0/manage_proj_delete.php':
             wd.find_element("css selector","input[value='Удалить проект']").click()
