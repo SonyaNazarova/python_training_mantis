@@ -68,7 +68,7 @@ class ProjectHelper:
             href = element.get_attribute("href")
             href.startswith("http://localhost/mantisbt-2.26.0/manage_proj_edit_page.php?project_id=")
             ids = int(href[70:])
-            if id == ids:
+            if id == str(ids):
                 wd.find_element("link text", "%s" % name).click()
                 break
 
