@@ -3,10 +3,7 @@ from model.project import Project
 import string
 
 def test_add_project(app, json_projects):
-    username = "administrator"
-    password = "root"
-    app.session.login(username, password)
-    old_projects = app.soap.get_project_list(username, password)
+    old_projects = app.soap.get_project_list()
     project = json_projects
     n = 0
     for old_project in old_projects:
@@ -17,7 +14,7 @@ def test_add_project(app, json_projects):
         print("Ошибка")
     else:
         app.project.create(project)
-        new_projects = app.soap.get_project_list(username, password)
+        new_projects = app.soap.get_project_list()
         old_projects.append(project)
         assert sorted(old_projects, key=Project.id_or_max) == sorted(new_projects, key=Project.id_or_max)
 

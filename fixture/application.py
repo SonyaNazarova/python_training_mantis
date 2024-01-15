@@ -4,7 +4,7 @@ from fixture.project import ProjectHelper
 from fixture.soap import SoapHelper
 class Application:
 
-    def __init__(self, browser, base_url):
+    def __init__(self, browser, config):
         if browser == "firefox":
             self.wd = webdriver.Firefox()
         elif browser == "chrome":
@@ -17,11 +17,12 @@ class Application:
         self.session = SessionHelper(self)
         self.project = ProjectHelper(self)
         self.soap = SoapHelper(self)
-        self.base_url = base_url
+        self.config = config
+        self.baseUrl = config['web']['baseUrl']
 
     def open_home_page(self):
         wd = self.wd
-        wd.get(self.base_url)
+        wd.get(self.baseUrl)
 
     def is_valid(self):
         try:

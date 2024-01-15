@@ -35,8 +35,7 @@ class SessionHelper:
 
     def is_logged_in(self):
         wd = self.app.wd
-        wd.find_element("xpath", "//div[@id='navbar-container']/div[2]/ul/li[3]/a/span").click()
-        return len(wd.find_elements("link text", " Выход")) > 0
+        return len(wd.find_elements("link text", "Все проекты")) > 0
 
 
     def is_logged_in_as(self, username):
